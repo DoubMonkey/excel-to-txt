@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Excel文件上传处理</title>
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <style>
+        body{
+            text-align: center;
+        }
+        .box{
+            display: inline-block;
+            max-width: 750px;
+            margin-top: 250px;
+        }
+        select{
+            border: solid 1px #888;
+            border-radius: 5px;
+            padding: 10px;
+        }
+        #fileinput{
+            border: solid 1px #888;
+            width: 500px;
+            border-radius: 5px;
+            padding: 10px;
+        }
+        #upload{
+            background-color: #1890ff;
+            border: solid 1px #1890ff;
+            color: #ffffff;
+            font-weight: bolder;
+            display: inline-block;
+            width: 200px;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            outline: none;
+        }
+        #download{
+            background-color: #fff;
+            border: solid 1px #ccc;
+            font-weight: bolder;
+            color: #ccc;
+            display: inline-block;
+            width: 200px;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+<div class="box">
+    <h1>上传Excel文件</h1>
+    <br />
+    <form action="" id="form" enctype="multipart/form-data">
+        <input type="file" name="excel_path" id="fileinput" accept=".xlsx">
+        <br /><br />
+        <button type="button" id="upload">上传文件</button>
+        <button type="button" id="download" disabled="true">下载压缩包</button>
+    </form>
+    <br />
+    <script>
+        $("#upload").click(function () {
+            var file = $('#fileinput').get(0).files[0];
+            var formData  = new FormData();
+            formData.append("file",file);
+            console.log(formData);
+            $.ajax({
+                url: 'upload.php',
+                type: 'POST',
+                data: formData,
+                processData: false,   // jQuery不要去处理发送的数据
+                contentType: false,
+                success: function (data) {
+                    // console.log(data);
+                    $('#download').css('background-color', '#1890ff');
+                    $('#download').css('border', '1px solid #1890ff');
+                    $('#download').css('color', '#ffffff');
+                    $('#download').attr("disabled",false);
+                    $('#download').on('click',function () {
+                        location.href = data;
+                    })
+                }
+            })
+        })
+    </script>
+</div>
+</body>
+</html>
